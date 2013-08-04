@@ -9,8 +9,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.ws.rs.core.Response;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -59,17 +57,5 @@ public class EmployeeResourceTest {
 		// Then
 		verify(employeeService).getEmployee(5L);
 		assertEquals(expectedEmployee, employeeRetrieved);
-	}
-
-	@Test
-	public void shouldInvokeSave() throws Exception {
-		// Given
-		Employee employee = new Employee();
-
-		// When
-		Response response = employeeResource.save(employee);
-
-		// Then
-		assertEquals(201, response.getStatus());
 	}
 }

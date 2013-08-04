@@ -9,4 +9,6 @@ public interface EmployeeDao {
 	List<Employee> getAllEmployees();
 
 	Employee getEmployee(Long employeeId);
+
+	Employee save(Employee employee);
 }

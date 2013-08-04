@@ -4,13 +4,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.joopy.samples.validation.EmployeeExist;
+
 @XmlRootElement
 public class Employee {
 
 	private Long id;
 
-	@NotEmpty
+	@NotEmpty(message = "{name.empty}")
 	private String name;
+
+	@EmployeeExist
+	private Long managerId;
 
 	public Long getId() {
 		return id;
@@ -28,7 +33,19 @@ public class Employee {
 		this.name = name;
 	}
 
+	public Long getManagerId() {
+		return managerId;
+	}
+
+	public void setManagerId(Long managerId) {
+		this.managerId = managerId;
+	}
+
 	public static class Builder {
+
+		public Employee getEmployee() {
+			return employee;
+		}
 
 		private final Employee employee = new Employee();
 

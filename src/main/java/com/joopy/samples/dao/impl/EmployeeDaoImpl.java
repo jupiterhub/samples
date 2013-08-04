@@ -2,6 +2,7 @@ package com.joopy.samples.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Repository;
 
@@ -11,12 +12,18 @@ import com.joopy.samples.domain.Employee;
 @Repository
 public class EmployeeDaoImpl implements EmployeeDao {
 
+	private static final AtomicLong idCounter = new AtomicLong(5);
+
 	private static List<Employee> dbData = new ArrayList<Employee>();
 
 	static {
-		dbData.add(new Employee.Builder().withId(1l).withName("Lea Michele").build());
-		dbData.add(new Employee.Builder().withId(2l).withName("Naya Rivera").build());
-		dbData.add(new Employee.Builder().withId(3l).withName("Darren Criss").build());
+		// prepopulate data
+		dbData.add(new Employee.Builder().withId(1l).withName("Lea Michele")
+				.build());
+		dbData.add(new Employee.Builder().withId(2l).withName("Naya Rivera")
+				.build());
+		dbData.add(new Employee.Builder().withId(3l).withName("Darren Criss")
+				.build());
 	}
 
 	@Override
@@ -27,10 +34,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public Employee getEmployee(Long employeeId) {
 		for (Employee employee : dbData) {
-			if (employee.getId() == employeeId) {
+			if (employee.getId().equals(employeeId)) {
 				return employee;
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Employee save(Employee employee) {
+		employee.setId(idCounter.incrementAndGet());
+		dbData.add(employee);
+		return employee;
 	}
 }
