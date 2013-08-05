@@ -1,5 +1,6 @@
 package com.joopy.samples.web;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -12,11 +13,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.stereotype.Component;
 
 import com.joopy.samples.domain.Employee;
+import com.joopy.samples.exception.AppException;
 import com.joopy.samples.service.EmployeeService;
 
 @Path("employees")
@@ -39,6 +42,24 @@ public class EmployeeResource {
 	@Path("{employeeId}")
 	public Employee getEmployee(@PathParam("employeeId") Long employeeId) {
 		return employeeService.getEmployee(employeeId);
+	}
+	
+	@GET
+	@Path("response")
+	public Response response() throws URISyntaxException {
+	    return Response.created(new URI("1")).entity(employeeService.getEmployee(1l)).build();
+	}
+	
+	@GET
+	@Path("exception")
+	public Employee throwException() {
+	    throw new IllegalArgumentException("Hardcoded Exception");
+	}
+
+	@GET
+	@Path("exception2")
+	public Employee throwException2() {
+	    throw new AppException();
 	}
 
 	@POST
