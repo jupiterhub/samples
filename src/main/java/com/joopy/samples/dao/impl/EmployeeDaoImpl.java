@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.joopy.samples.dao.EmployeeDao;
 import com.joopy.samples.domain.Employee;
 
-@Repository
+@Repository("employeeDaoHardcoded")
 public class EmployeeDaoImpl implements EmployeeDao {
 
 	private static final AtomicLong idCounter = new AtomicLong(5);
@@ -18,12 +18,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	static {
 		// prepopulate data
-		dbData.add(new Employee.Builder().withId(1l).withName("Lea Michele")
-				.build());
-		dbData.add(new Employee.Builder().withId(2l).withName("Naya Rivera")
-				.build());
-		dbData.add(new Employee.Builder().withId(3l).withName("Darren Criss")
-				.build());
+		dbData.add(new Employee.Builder().withId(1l).withName("Lea Michele").build());
+		dbData.add(new Employee.Builder().withId(2l).withName("Naya Rivera").build());
+		dbData.add(new Employee.Builder().withId(3l).withName("Darren Criss").build());
 	}
 
 	@Override
@@ -32,8 +29,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
-	public Employee getEmployee(Long employeeId) {
-		for (Employee employee : dbData) {
+	public Employee getEmployee(final Long employeeId) {
+		for (final Employee employee : dbData) {
 			if (employee.getId().equals(employeeId)) {
 				return employee;
 			}
@@ -42,7 +39,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
-	public Employee save(Employee employee) {
+	public Employee save(final Employee employee) {
 		employee.setId(idCounter.incrementAndGet());
 		dbData.add(employee);
 		return employee;

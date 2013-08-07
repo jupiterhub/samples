@@ -9,37 +9,37 @@ import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.joopy.samples.domain.Employee;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath*:applicationContext.xml")
+@ContextConfiguration("classpath*:spring/applicationContext.xml")
+@Transactional
 public class EmployeeResourceIT {
 
-    @Resource
-    private Validator validator;
-    
+	@Resource
+	private Validator validator;
+
 	@Resource
 	private EmployeeResource employeeResource;
-	
+
 	@Test
 	public void shouldInjectBean() {
-	    // Given / When / Then
-	    assertNotNull(employeeResource);
+		// Given / When / Then
+		assertNotNull(this.employeeResource);
 	}
-	
+
 	@Test
 	public void shouldValidate() {
-	    // Given / When
-	    Set<ConstraintViolation<Employee>> validate = validator.validate(new Employee());
-	    
-	    // Then
-	    assertFalse(validate.isEmpty());
+		// Given / When
+		final Set<ConstraintViolation<Employee>> validate = this.validator.validate(new Employee());
+
+		// Then
+		assertFalse(validate.isEmpty());
 	}
 }

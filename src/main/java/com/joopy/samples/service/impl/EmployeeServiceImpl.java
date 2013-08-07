@@ -13,21 +13,21 @@ import com.joopy.samples.service.EmployeeService;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-	@Resource
+	@Resource(name = "employeeDaoJpa")
 	private EmployeeDao employeeDao;
 
 	@Override
 	public List<Employee> getAllEmployees() {
-		return employeeDao.getAllEmployees();
+		return this.employeeDao.getAllEmployees();
 	}
 
 	@Override
-	public Employee getEmployee(Long employeeId) {
-		return employeeDao.getEmployee(employeeId);
+	public Employee getEmployee(final Long employeeId) {
+		return this.employeeDao.getEmployee(employeeId);
 	}
 
 	@Override
-	public Employee save(Employee employee) {
-		return employeeDao.save(employee);
+	public Employee save(final Employee employee) {
+		return this.employeeDao.save(employee);
 	}
 }

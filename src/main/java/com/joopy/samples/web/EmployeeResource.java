@@ -26,94 +26,101 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
+import org.springframework.stereotype.Component;
 
 import com.joopy.samples.domain.Employee;
 import com.joopy.samples.exception.AppException;
 import com.joopy.samples.service.EmployeeService;
 
+@Component
 @Path("employees")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @ValidateRequest
 // We have to explicitly specify @ValidateRequest until we use use Bean Validation 1.1
-// This is due to Hibernate-validator-Spring integration https://jira.springsource.org/browse/SPR-10466 
+// This is due to Hibernate-validator-Spring integration
+// https://jira.springsource.org/browse/SPR-10466
 public class EmployeeResource {
 
-    @Resource
-    private Validator validator;
-    
+	@Resource
+	private Validator validator;
+
 	@Resource
 	private EmployeeService employeeService;
 
 	@GET
 	public List<Employee> getEmployees() {
-		return employeeService.getAllEmployees();
+		return this.employeeService.getAllEmployees();
 	}
 
 	@GET
 	@Path("{employeeId}")
-	public Employee getEmployee(@PathParam("employeeId") Long employeeId) {
-		return employeeService.getEmployee(employeeId);
+	public Employee getEmployee(@PathParam("employeeId") final Long employeeId) {
+		return this.employeeService.getEmployee(employeeId);
 	}
-	
+
 	@GET
 	@Path("response")
 	public Response response() throws URISyntaxException {
-	    return Response.created(new URI("1")).entity(employeeService.getEmployee(1l)).build();
+		return Response.created(new URI("1")).entity(this.employeeService.getEmployee(1l)).build();
 	}
-	
+
 	@GET
 	@Path("exception")
 	public Employee throwException() {
-	    throw new IllegalArgumentException("Hardcoded Exception");
+		throw new IllegalArgumentException("Hardcoded Exception");
 	}
 
 	@GET
 	@Path("exception2")
 	public Employee throwException2() {
-	    throw new AppException();
+		throw new AppException();
 	}
 
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	// TODO: find a way for @Valid annotation does to inject dependencies;
-	// Need to override  org.jboss.resteasy.core.ResourceMethodInvoker to use Spring Created validator
-	public Response save(Employee employee) throws URISyntaxException {
-	    // Move the constraint to a separate class until we make the @Valid working
-	    Set<ConstraintViolation<Employee>> validate = validator.validate(employee);
-	    if(validate.isEmpty()) {
-	        return Response.created(new URI("/employees/employeeId999")).entity(employeeService.save(employee)).build();
-	    } else {
-	        StringBuilder errorMessages = new StringBuilder();
-	        Iterator<ConstraintViolation<Employee>> iterator = validate.iterator();
-	        int ctr = 0;
-            while(iterator.hasNext()) {
-                if (ctr > 1) {
-                    errorMessages.append(", ");
-                }
-	            ConstraintViolation<Employee> constraintValidation = iterator.next();
-	            errorMessages.append(constraintValidation.getMessage());
-	            ctr++;
-	        }
-	        return Response.status(Status.BAD_REQUEST).entity(errorMessages.toString()).build();
-	    }
+	// Need to override org.jboss.resteasy.core.ResourceMethodInvoker to use Spring Created
+	// validator
+	public Response save(final Employee employee) throws URISyntaxException {
+		// Move the constraint to a separate class until we make the @Valid working
+		final Set<ConstraintViolation<Employee>> validate = this.validator.validate(employee);
+		if (validate.isEmpty()) {
+			return Response.created(new URI("/employees/employeeId999"))
+					.entity(this.employeeService.save(employee)).build();
+		} else {
+			final StringBuilder errorMessages = new StringBuilder();
+			final Iterator<ConstraintViolation<Employee>> iterator = validate.iterator();
+			int ctr = 0;
+			while (iterator.hasNext()) {
+				if (ctr > 1) {
+					errorMessages.append(", ");
+				}
+				final ConstraintViolation<Employee> constraintValidation = iterator.next();
+				errorMessages.append(constraintValidation.getMessage());
+				ctr++;
+			}
+			return Response.status(Status.BAD_REQUEST).entity(errorMessages.toString()).build();
+		}
 	}
-	
+
 	// We can do some filtering by implementing these interface
-    @Provider
-    static class WebApplicationExceptionFilter implements ContainerRequestFilter, ContainerResponseFilter {
+	@Provider
+	static class WebApplicationExceptionFilter implements ContainerRequestFilter,
+			ContainerResponseFilter {
 
-        @Override
-        public void filter(final ContainerRequestContext context) throws IOException {
-            System.out.println("WebApplicationExceptionFilter.preFilter() enter");
-            // doSomeProcessing before method
-            System.out.println("WebApplicationExceptionFilter.preFilter() exit");
-        }
+		@Override
+		public void filter(final ContainerRequestContext context) throws IOException {
+			System.out.println("WebApplicationExceptionFilter.preFilter() enter");
+			// doSomeProcessing before method
+			System.out.println("WebApplicationExceptionFilter.preFilter() exit");
+		}
 
-        @Override
-        public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) throws IOException {
-            System.out.println("WebApplicationExceptionFilter.postFilter() enter");
-            // doSomeProcessing after method
-            System.out.println("WebApplicationExceptionFilter.postFilter() exit");
-        }
-    }	
+		@Override
+		public void filter(final ContainerRequestContext requestContext,
+				final ContainerResponseContext responseContext) throws IOException {
+			System.out.println("WebApplicationExceptionFilter.postFilter() enter");
+			// doSomeProcessing after method
+			System.out.println("WebApplicationExceptionFilter.postFilter() exit");
+		}
+	}
 }

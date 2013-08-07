@@ -9,23 +9,28 @@ import com.joopy.samples.domain.Employee;
 
 public class EmployeeExistValidator implements ConstraintValidator<EmployeeExist, Long> {
 
-	@Resource
+	@Resource(name = "employeeDaoJpa")
 	private EmployeeDao employeeDao;
 
 	@Override
-	public void initialize(EmployeeExist constraintAnnotation) {
+	public void initialize(final EmployeeExist constraintAnnotation) {
 		System.out.println("This only run once....");
 	}
 
 	@Override
-	public boolean isValid(Long value, ConstraintValidatorContext context) {
-	    for (Employee employee : employeeDao.getAllEmployees()) {
-	        if (employee.getId().equals(value)) {
-	            return true;
-	        }
-	    }
-	    context.disableDefaultConstraintViolation();
-	    context.buildConstraintViolationWithTemplate("Get from ResourceBundle empId is: " + value).addConstraintViolation();
-	    return false;
+	public boolean isValid(final Long value, final ConstraintValidatorContext context) {
+		if (this.employeeDao == null || this.employeeDao.getAllEmployees() == null) {
+			return true;
+		}
+
+		for (final Employee employee : this.employeeDao.getAllEmployees()) {
+			if (employee.getId().equals(value)) {
+				return true;
+			}
+		}
+		context.disableDefaultConstraintViolation();
+		context.buildConstraintViolationWithTemplate("Get from ResourceBundle empId is: " + value)
+				.addConstraintViolation();
+		return false;
 	}
 }

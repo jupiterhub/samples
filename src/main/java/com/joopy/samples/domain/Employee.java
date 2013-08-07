@@ -1,5 +1,9 @@
 package com.joopy.samples.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -8,9 +12,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.joopy.samples.validation.EmployeeExist;
 
+@Entity(name = "employee")
 @XmlRootElement
 public class Employee {
 
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
 	private Long id;
 
 	@NotEmpty(message = "{name.empty}")
@@ -18,63 +25,63 @@ public class Employee {
 
 	@EmployeeExist
 	private Long managerId;
-	
+
 	@NotNull(message = "{provide.department}")
-	@Max(value=3, message = "{department.too.big}")
+	@Max(value = 3, message = "{department.too.big}")
 	private Integer departmentId;
 
 	public Long getId() {
-		return id;
+		return this.id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
-	
+
 	public Integer getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Integer departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public Long getManagerId() {
-		return managerId;
+		return this.departmentId;
 	}
 
-	public void setManagerId(Long managerId) {
+	public void setDepartmentId(final Integer departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	public Long getManagerId() {
+		return this.managerId;
+	}
+
+	public void setManagerId(final Long managerId) {
 		this.managerId = managerId;
 	}
 
 	public static class Builder {
 
 		public Employee getEmployee() {
-			return employee;
+			return this.employee;
 		}
 
 		private final Employee employee = new Employee();
 
-		public Builder withId(Long id) {
-			employee.setId(id);
+		public Builder withId(final Long id) {
+			this.employee.setId(id);
 			return this;
 		}
 
-		public Builder withName(String name) {
-			employee.setName(name);
+		public Builder withName(final String name) {
+			this.employee.setName(name);
 			return this;
 		}
 
 		public Employee build() {
-			return employee;
+			return this.employee;
 		}
 	}
 }

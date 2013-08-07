@@ -1,10 +1,14 @@
 package com.joopy.samples.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,33 +32,45 @@ public class EmployeeServiceImplTest {
 	}
 
 	@Test
-	public void shouldInvokeEmployeeDaoWhenRetrievingAllEmployees() {
-		// Given / When
-		employeeServiceImpl.getAllEmployees();
-
-		// Then
-		verify(employeeDao).getAllEmployees();
-	}
-
-	@Test
-	public void shouldInvokeEmployeeDaoWhenRetrievingSpecificEmployee() {
-		// Given / When
-		employeeServiceImpl.getEmployee(5L);
-
-		// Then
-		verify(employeeDao).getEmployee(5L);
-	}
-
-	@Test
-	public void shouldReturnEmployeeWhenRetrievingSpecificEmployee() {
+	public void shouldReturnEmployeesWhenRetrievingAllEmployees() {
 		// Given
-		Employee expectedEmployee = new Employee();
-		when(employeeDao.getEmployee(anyLong())).thenReturn(expectedEmployee);
+		final ArrayList<Employee> expectedEmployees = new ArrayList<Employee>();
+		when(this.employeeDao.getAllEmployees()).thenReturn(expectedEmployees);
 
 		// When
-		Employee employeeRetrieved = employeeServiceImpl.getEmployee(5L);
+		final List<Employee> employeesRetrieved = this.employeeServiceImpl.getAllEmployees();
 
 		// Then
+		verify(this.employeeDao).getAllEmployees();
+		assertEquals(expectedEmployees, employeesRetrieved);
+	}
+
+	@Test
+	public void shouldReturnEmployeeWhenRetrievingSpecificEmployees() {
+		// Given
+		final Employee expectedEmployee = new Employee();
+		when(this.employeeDao.getEmployee(anyLong())).thenReturn(expectedEmployee);
+
+		// When
+		final Employee employeeRetrieved = this.employeeServiceImpl.getEmployee(5L);
+
+		// Then
+		verify(this.employeeDao).getEmployee(5L);
 		assertEquals(expectedEmployee, employeeRetrieved);
 	}
+
+	@Test
+	public void shouldReturnEmployeeWhenSaving() {
+		// Given
+		final Employee expectedEmployee = new Employee();
+		when(this.employeeServiceImpl.save(any(Employee.class))).thenReturn(expectedEmployee);
+
+		// When
+		final Employee employeeSaved = this.employeeServiceImpl.save(expectedEmployee);
+
+		// Then
+		verify(this.employeeDao).save(expectedEmployee);
+		assertEquals(expectedEmployee, employeeSaved);
+	}
+
 }
