@@ -1,5 +1,7 @@
 package com.joopy.samples.domain;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -16,6 +18,10 @@ public class Employee {
 
 	@EmployeeExist
 	private Long managerId;
+	
+	@NotNull(message = "{provide.department}")
+	@Max(value=3, message = "{department.too.big}")
+	private Integer departmentId;
 
 	public Long getId() {
 		return id;
@@ -32,8 +38,16 @@ public class Employee {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Integer getDepartmentId() {
+        return departmentId;
+    }
 
-	public Long getManagerId() {
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public Long getManagerId() {
 		return managerId;
 	}
 

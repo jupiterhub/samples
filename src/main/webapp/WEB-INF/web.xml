@@ -2,36 +2,17 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
 
-    <!--  Make RestEasy to scan @Provider annotation -->
-	<context-param>
-		<param-name>resteasy.providers</param-name>
-		<param-value>
-		  com.joopy.samples.exception.IllegalArgumentExceptionMapper,
-		  com.joopy.samples.exception.NoContentExceptionMapper
-		</param-value>
-	</context-param>
-
-	<listener>
-		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-	</listener>
-
-	<listener>
-		<!-- listener-class>org.springframework.web.context.ContextLoaderListener</listener-class -->
-		<listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
-	</listener>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring/applicationContext.xml</param-value>
-	</context-param>
-
 	<servlet>
-		<servlet-name>Resteasy</servlet-name>
-		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<servlet-name>springServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/applicationContext.xml</param-value>
+		</init-param>
 	</servlet>
 
-
 	<servlet-mapping>
-		<servlet-name>Resteasy</servlet-name>
+		<servlet-name>springServlet</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 </web-app>
