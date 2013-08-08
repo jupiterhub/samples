@@ -57,4 +57,19 @@ public class EmployeeDaoJpaIT {
 		// Then
 		assertEquals(2, allEmployees.size());
 	}
+
+	@Test
+	public void shouldReturnSpecificEmployeeWhenRetrievingSpecificEmployee() {
+		// Given
+		final Employee employee = new Employee();
+		employee.setName("Jupiter1");
+		employee.setDepartmentId(1);
+		final Employee savedEmployee = this.employeeDao.save(employee);
+
+		// When
+		final Employee retrievedEmployee = this.employeeDao.getEmployee(savedEmployee.getId());
+
+		// Then
+		assertEquals(savedEmployee.getName(), retrievedEmployee.getName());
+	}
 }

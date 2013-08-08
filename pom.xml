@@ -31,6 +31,7 @@
 				<artifactId>resteasy-jaxrs</artifactId>
 				<version>3.0.2.Final</version>
 			</dependency>
+			<!-- Enable by explicitly specifying  @ValidateRequest https://jira.springsource.org/browse/SPR-10466 -->
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-hibernatevalidator-provider</artifactId>
@@ -41,7 +42,7 @@
 				<artifactId>hibernate-validator</artifactId>
 				<version>4.3.1.Final</version>
 			</dependency>
-			<!-- This does not allow DI until Spring 4 http://stackoverflow.com/questions/17679365/method-level-validation-in-spring-3-2-3-with-hibernate-validator-5-0-0-final -->
+			<!-- Bean Validation 1.1 does not allow DI until Spring 4 http://stackoverflow.com/questions/17679365/method-level-validation-in-spring-3-2-3-with-hibernate-validator-5-0-0-final -->
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-validator-provider-11</artifactId>

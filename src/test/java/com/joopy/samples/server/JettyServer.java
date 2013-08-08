@@ -5,11 +5,11 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyServer {
 
-	public static void main(String[] args) throws Exception {
-		String webappDirLocation = "src/main/webapp/";
+	public static void main(final String[] args) throws Exception {
+		final String webappDirLocation = "src/main/webapp/";
 
-		Server server = new Server(8080);
-		WebAppContext root = new WebAppContext();
+		final Server server = new Server(8080);
+		final WebAppContext root = new WebAppContext();
 
 		root.setContextPath("/");
 		root.setDescriptor(webappDirLocation + "/WEB-INF/web.xml");

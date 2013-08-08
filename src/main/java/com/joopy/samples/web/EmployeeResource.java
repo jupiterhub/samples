@@ -36,9 +36,6 @@ import com.joopy.samples.service.EmployeeService;
 @Path("employees")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @ValidateRequest
-// We have to explicitly specify @ValidateRequest until we use use Bean Validation 1.1
-// This is due to Hibernate-validator-Spring integration
-// https://jira.springsource.org/browse/SPR-10466
 public class EmployeeResource {
 
 	@Resource

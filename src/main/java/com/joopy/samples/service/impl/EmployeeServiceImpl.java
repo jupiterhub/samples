@@ -5,11 +5,13 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.joopy.samples.dao.EmployeeDao;
 import com.joopy.samples.domain.Employee;
 import com.joopy.samples.service.EmployeeService;
 
+@Transactional
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 

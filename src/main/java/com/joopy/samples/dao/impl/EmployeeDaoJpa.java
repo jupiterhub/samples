@@ -18,14 +18,13 @@ public class EmployeeDaoJpa implements EmployeeDao {
 
 	@Override
 	public List<Employee> getAllEmployees() {
-		this.entityManager.flush();
 		return this.entityManager.createQuery("SELECT o FROM employee o", Employee.class)
 				.getResultList();
 	}
 
 	@Override
 	public Employee getEmployee(final Long employeeId) {
-		return null;
+		return this.entityManager.find(Employee.class, employeeId);
 	}
 
 	@Override
